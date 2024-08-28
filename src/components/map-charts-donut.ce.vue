@@ -4,20 +4,29 @@
 
   import UiTooltip from '~/components/ui-tooltip.vue';
 
-  const $props = defineProps<{
-    existing: number;
-    new: number;
-    state: string;
-  }>();
+  const $props = withDefaults(
+    defineProps<{
+      existing: number;
+      height?: number;
+      new: number;
+      state: string;
+      width?: number;
+    }>(),
+    {
+      height: 50,
+      width: 50,
+    },
+  );
 
   const COORDS_MAP = {
-    LA: { x: '58%', y: '72%' },
-    NY: { x: '84%', y: '22%' },
+    CA: { x: '10%', y: '20%' },
+    LA: { x: '61%', y: '75%' },
+    NY: { x: '87%', y: '27%' },
   } as const;
 
   const coords = computed(() => ({
-    x: COORDS_MAP[$props.state]?.x ?? 0,
-    y: COORDS_MAP[$props.state]?.y ?? 0,
+    x: COORDS_MAP[$props.state]?.x ?? `${$props.width / 2}px`,
+    y: COORDS_MAP[$props.state]?.y ?? `${$props.height / 2}px`,
   }));
 
   const value = (count: number) => count;
@@ -31,11 +40,15 @@
     <UiTooltip>
       <VisSingleContainer
         :data="[$props.existing, $props.new]"
-        :height="50"
-        :width="50"
+        :height="$props.height"
+        :width="$props.width"
       >
         <VisDonut :arc-width="12" :color :value />
       </VisSingleContainer>
+
+      <template #content>
+        {{ $props }}
+      </template>
     </UiTooltip>
   </figure>
 </template>
@@ -50,7 +63,9 @@
     left: var(--x);
     margin: 0;
     padding: 0;
+    transform: translate(-50%, -50%);
     position: absolute;
     top: var(--y);
+    pointer-events: all;
   }
 </style>

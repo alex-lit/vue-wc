@@ -9,6 +9,7 @@
   } from 'radix-vue';
 
   defineSlots<{
+    content(): any;
     default(): any;
   }>();
 </script>
@@ -24,10 +25,16 @@
 
       <TooltipPortal>
         <TooltipContent class="ui-tooltip__content" :side-offset="5">
-          Add to library
+          <!-- @slot content -->
+          <slot name="content"></slot>
+          <!-- /@slot content -->
           <TooltipArrow class="ui-tooltip__arrow" :width="8" />
         </TooltipContent>
       </TooltipPortal>
     </TooltipRoot>
   </TooltipProvider>
 </template>
+
+<style lang="scss">
+  @import './ui-tooltip.scss';
+</style>
